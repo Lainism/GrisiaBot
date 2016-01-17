@@ -18,6 +18,22 @@ sevens = None
 Logging in
 '''
 
+'''
+Debounce: gotten from Dio
+def timerfunction():
+        global debounce
+        debounce = True
+
+    if message.content.startswith('o lol'):
+        global debounce
+        from threading import Timer
+        if debounce == True:
+            debounce = False
+            client.send_message(message.channel, 'o lol')
+            t = Timer(3.0, timerfunction)
+            t.start()
+'''
+
 # I want to be able to share the code so...
 file = open("login.txt", "r")
 uinfo = file.read().split(';')
@@ -208,6 +224,22 @@ def on_message(msg):
 	#  Misc. commands  #
 	# -----------------#
 
+	elif ms(message, "!kill") or ms(message, "!murder"):
+		double = [msg.author.mention() + " Would you like me to contact a necromancer in the case you'll ever regret this?",
+					msg.author.mention() + " Just don't come back crying, asking for a ressurrection. I'm not going to do it.",
+					msg.author.mention() + " Murder is bad, but getting caught is even worse. Please don't be advertise your plans.",
+					msg.author.mention() + " Perhaps you should consult a psychologist before going through with this?"]
+		dark = [msg.author.mention() + " Murder? Death? Destruction? Sounds nice.",
+				msg.author.mention() + " is boasting about your plans online? What an amateur.",
+				msg.author.mention() + " Shut up or you're the one that's gonna end up rejoining God of Light.",
+				msg.author.mention() + " If you ever need a necromancer to make them into a zombie, just ask me.",
+				msg.author.mention() + " Die.",
+				msg.author.mention() + " Sounds like fun. Can I join? -No, don't answer. I'll do it regardless."]
+		if mode != "dark":
+			r(msg, "God of Light scorns on those seeking to extinguish the light of others. You must pray for His forgiveness and redeem yourself at His mercy.",
+				random.choice(double))
+		else:
+			r(msg, random.choice(dark))
 	elif ms(message, "!Whodunnit") or ms(message, "!Whodunit") or ms(message, "!Blackout") or ms(message, "!Black out"):
 		r(msg, "http://www.youtube.com/watch?v=OYRknZ-6pRM")
 	elif ms(message, "!Initial D") or ms(message, "!InitialD") or ms(message, "!Eurobeat") or ms(message, "!Cars") or ms(message, "!86"):
@@ -215,7 +247,8 @@ def on_message(msg):
 			r(msg, random.choice(initiald))
 	elif ms(message, "!Tsundere"):
 		r(msg, "Dere dere~", "TSUN TSUN!")
-
+	elif ms(message, "!90s") or ms(message, "!running"):
+		r(msg, "https://www.youtube.com/watch?v=-gx8kg8BUa0")
 	elif (mc(message, "I don't understand") or mc(message, "Wakaranai")) and not mc(message, "webm"):
 		r(msg, "http://openings.moe/?video=Wakaranai.webm")
 	elif ms(message, "!Windows") or ms(message, "!Linux") or ms(message, "!OSX") or ms(message, "!MAC"):
