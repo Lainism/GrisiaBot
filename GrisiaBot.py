@@ -1,6 +1,7 @@
 import discord
 import random
 import time
+from SevensGame import *
 
 '''
 @author: Singidava
@@ -10,6 +11,8 @@ import time
 Global variables
 '''
 mode = "double"
+game = False
+sevens = None
 
 '''
 Logging in
@@ -78,14 +81,20 @@ def mc(message, c):
 	
 # Answering based on the mood
 # r stands for response
-def r(msg, light = "", dark = ""):
+def r(msg, light = "", dark = "", thinking=False):
 
 	# If I've been lazy and only wrote one message...
 	if (len(light) > 0 and len(dark) < 1):
-		client.send_message(msg.channel, light)
+		message = light
+		if thinking:
+			message="(" + light + ")"
+		client.send_message(msg.channel, message)
 		return
 	elif (len(light) < 1 and len(dark) > 0):
-		client.send_message(msg.channel, dark)
+		message = dark
+		if thinking:
+			message = "(" + dark + ")"
+		client.send_message(msg.channel, message)
 		return
 	
 	# If there are multiple messages, check the mode setting
@@ -102,6 +111,10 @@ def r(msg, light = "", dark = ""):
 
 @client.event
 def on_ready():
+	global client
+	global lightava
+
+	client.edit_profile(uinfo[1], avatar=lightava)
 	print("The bot is running as the user {}".format(client.user.name))
 	
 @client.event
@@ -112,12 +125,19 @@ def on_message(msg):
 	global lightava
 	global darkava
 	global initiald
+	global game
+	global sevens
 
 	# -----------------#
 	# General commands #
 	# -----------------#
 
 	message = msg.content
+
+
+	thinking = False
+	if mode == "double":
+		thinking = True
 
 	command = False
 	if ms(message, "!command") and len(message) > 9 and str(msg.author.id) == str(134719938886631424):
@@ -126,10 +146,8 @@ def on_message(msg):
 		r(msg, "By God of Light I shall swear to carry out my Mistress' wish.", "It's not like I have a choice...")
 
 	if ms(message, "!repeat") and len(message) > 9 and str(msg.author.id) == str(134719938886631424):
-		if (mode == "dark"):
-			r(msg, "Seriously...? Whatever.")
-		elif (mode == "double"):
-			r(msg, "(Seriously...? Whatever.)")
+		if (mode != "light"):
+			r(msg, "Seriously...? Whatever.", thinking=thinking)
 		r(msg, message[8:])
 
 	# Bot information
@@ -167,8 +185,8 @@ def on_message(msg):
 		r(msg, "God of Light shall scorn on those who disrespect others. You must pray for His benevolence and forgiveness to have your soul cleansed.",
 				"Mistress' name is Singidava you oaf! Learn to spell unless you want to risk rejoining God of Light early!")
 
-	elif ms(message, "Hi Grisia") or ms(message, "Hi Sun") or ms(message, "Hello Grisia") or ms(message, "Hello Sun") or ms(message, "Hello SingiBot")  or ms(message, "!Hello"):
-		r(msg, "The benevolent God of Light will forgive your sins.",
+	elif ms(message, "Hi Grisia") or ms(message, "Hi Sun") or ms(message, "Hello Grisia")  or ms(message, "Hello " + client.user.mention()) or ms(message, "Hello Sun") or ms(message, "Hello SingiBot")  or ms(message, "!Hello") or ms(message, "Hi " + client.user.mention()):
+		r(msg, "The benevolent God of Light will forgive your sins, " + msg.author.mention() + ".",
 				"Yo.")
 
 	elif ms(message, "!Grisia"):
@@ -206,6 +224,8 @@ def on_message(msg):
 		r(msg, "http://openings.moe/?video=1441552323691.webm")
 	elif ms(message, "!Maria") or ms(message, "!MaidBot") or ms(message, "!Maid"):
 		r(msg, "https://www.youtube.com/watch?v=q2qBEsYtP04")
+	elif ms(message, "!congratulations"):
+		r(msg, "https://www.youtube.com/watch?v=wDajqW561KM")
 	elif ms(message, "!Kero") or ms(message, "!Frog") or ms(message, "!Sgt"):
 		options = ["https://www.youtube.com/watch?v=qyJW_n-GY3E",
 					"https://www.youtube.com/watch?v=9Xpc1TBCdPo",
@@ -216,7 +236,7 @@ def on_message(msg):
 					"Want to try playing some Puyo Puyo yourself? http://www.puyovs.net/index.php",
 					"Trying to improve your Puyo skills? http://puyonexus.net/wiki/How_to_Play_Puyo_Puyo"]
 		r(msg, random.choice(options))
-	elif ms(message, "!Go" or ms(message, "!Cosumi") or ms(message, "!Baduk") or ms(message, "!Weiqi") or ms(message, "!Igo")):
+	elif ((message.lower() == "!go") or ms(message, "!Cosumi") or ms(message, "!Baduk") or ms(message, "!Weiqi") or ms(message, "!Igo")):
 		options = ["Looking for a place to play go online? Try https://online-go.com/",
 				"Looking for a place to play go online? Try https://www.gokgs.com/",
 				"Want to try online go problems? Go to http://goproblems.com/"]
@@ -250,15 +270,72 @@ def on_message(msg):
 		else:
 			r(msg, "It is God of Light's will that " + mn1 + " and " + mn2 + " will be united in holy matrimony.")
 
-		if mode == "double" and (str(member1.id) == str(client.user.id) or str(member2.id) == str(client.user.id)):
-				r(msg, "(Y-You must be joking...!)")
-		elif mode == "dark" and (str(member1.id) == str(client.user.id) or str(member2.id) == str(client.user.id)):
-				r(msg, "Y-You must be joking...!")
-		elif mode == "double":
-				r(msg, "(Hah! Serves you right!)")
-		elif mode == "dark":
-				r(msg, "Hah! Serves you right!")
+		if mode != "light" and (str(member1.id) == str(client.user.id) or str(member2.id) == str(client.user.id)):
+			r(msg, "Y-You must be joking...!", thinking=thinking)
+		elif mode != "light" and str(member1.id) == str(member2.id):
+			r(msg, "Feel my pain!", thinking=thinking)
+		elif mode != "light":
+			options = ["Hah! Serves you right!",
+						"Naturally, this means you'll be ditching any current lovers you might have.",
+						"At least you don't have to be married to your job... Geh.",
+						"Ah, young love. *So... jealous...!*",
+						"Church of God of Light doesn't allow divorces."]
+			r(msg, random.choice(options) , thinking=thinking)
 
+	# -----------------#
+	#      Sevens      #
+	# -----------------#
+
+	elif ms(message, "!sevens commands"):
+		client.send_message(msg.author, "Commands for game of sevens:\n" +
+			"!Sevens game - Creates a new game instance.\n" +
+			"!Sevens help - Displays the rules of the game.\n" +
+			"!Sevens commands - Displays the list of commands for game of sevens.\n" +
+			"!Join sevens - Join to game of sevens.\n" +
+			"!Set max time [time in seconds] - Set maximum turn length in seconds. The value must be between 5 and 200. The default is 60 seconds.\n" +
+			"!Start game - Starts the game and the game clock. To start a game you need at least two players.\n" +
+			"!Check hand - Check what cards you have in your hand.\n" +
+			"!Play [card name] - Plays the card from your hand to the field.\n" +
+			"!Play empty - If you don't have a card you can play your turn will be skipped and you are given penalty to hold.\n" +
+			"!End game - Ends the current game.")
+	elif ms(message, "!sevens help"):
+		client.send_message(msg.author, "~ Rules of sevens ~\n" +
+			"You can play card that's either directly above or below a card on the field. Ace is below 2.\n" +
+			"If you don't have a card you are given a penalty to hold. The player who holds this at the end of the game will receive 15 extra penalty points.\n" +
+			"The game ends when one of the players runs out of their cards.\n" + 
+			"At the end of the game player's all the remaining cards are summed together. Ace counts for 14 points.\n" +
+			"The player with least amount of penalty points at the end of the game wins.")
+	elif ms(message, "!Sevens game"):
+		if game:
+			r(msg, "There can be only one game at the time. To end the current game, please use command !end game.")
+			return
+		if msg.channel.is_private:
+			r(msg, "Can't play on a private channel. Please use a public one instead.")
+		sevens = SevensGame(client, msg)
+		game = True
+	elif ms(message, "!Join sevens") and game:
+		sevens.join(msg.author)
+	elif ms(message, "!Start game") and game:
+		sevens.start_game(msg.channel)
+	elif ms(message, "!check hand") and game:
+		sevens.check_hand(msg.author)
+	elif ms(message, "!play ") and game:
+		sevens.play_card(message[6:], msg.author, msg.channel)
+	elif ms(message, "!set max time ") and game:
+		try:
+			secs = int(message[14:].strip())
+			sevens.set_max_time(msg.author, secs)
+		except:
+			r(msg, "Please specify the number of seconds.")
+	elif ms(message, "!end game") and game:
+		game = not sevens.end_game(msg.author)
+		if not game:
+			sevens = None
+			r(msg, "The game of sevens has concluded.")
+
+	# -----------------#
+	#      Command     #
+	# -----------------#
 
 	elif command:
 		r(msg, message)
