@@ -264,6 +264,10 @@ def on_message(msg):
 					"https://www.youtube.com/watch?v=9Xpc1TBCdPo",
 					"https://www.youtube.com/watch?v=KUCJ0pfefzI"]
 		r(msg, random.choice(options))
+	elif ms(message, "!Uninstall") or ms(message, "!bokurano"):
+		options = ["https://www.youtube.com/watch?v=05p646nlYS0",
+					"https://www.youtube.com/watch?v=TJB0uCERrEQ"]
+		r(msg, random.choice(options))
 	elif ms(message, "!Puyo"):
 		options = ["Ever heard of Puyo Puyo? https://www.youtube.com/watch?v=tt8nU-JqNsk#t=1m20s",
 					"Want to try playing some Puyo Puyo yourself? http://www.puyovs.net/index.php",
