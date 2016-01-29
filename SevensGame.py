@@ -30,7 +30,7 @@ class SevensGame(object):
 		if self.active:
 			self.client.send_message(self.channel, "The registering period for the current game has already ended.")
 			return
-		elif len(players) > 5:
+		elif len(self.players) > 5:
 			self.client.send_message(self.channel, "There can't be more than six players.")
 			return
 
@@ -104,6 +104,11 @@ class SevensGame(object):
 		if player not in self.players:
 			self.client.send_message(player, "You don't have any cards.")
 			return
+		
+		if not self.active:
+			self.client.send_message(player, "The game hasn't started yet.")
+			return
+			
 		hand = self.hands.get(player.id)
 		hand.sort()
 		
@@ -255,8 +260,10 @@ class SevensGame(object):
 
 		# Share the remaining cards
 		counter = 0
+		next_player = self.turn
 		for card in self.deck:
-			self.hands.get(players[counter]).append(card)
+			self.hands.get(next_player.id).append(card)
+			next_player = self.get_next_player(next_player)
 			counter += 1
 
 		self.create_deck()
