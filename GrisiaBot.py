@@ -197,6 +197,12 @@ def on_message(msg):
 	elif (ms(message, "!shut up") or ms(message, "!shutup")) and (mode == "double" or mode == "light"):
 		r(msg, "(Argh, I'm falling asleep listening to my own preaches again... Can't somebody just change me to !mode dark?)")
 
+	elif ms(message, "!channel id") or ms(message, "!channelid"):
+		r(msg, str(msg.channel.id))
+
+	elif ms(message, "!server id") or ms(message, "!serverid"):
+		r(msg, str(msg.server.id))
+
 	elif mc(message, "Singidiva") or mc(message, "Singing Diva"):
 		r(msg, "God of Light shall scorn on those who disrespect others. You must pray for His benevolence and forgiveness to have your soul cleansed.",
 				"Mistress' name is Singidava you oaf! Learn to spell unless you want to risk rejoining God of Light early!")
@@ -249,8 +255,6 @@ def on_message(msg):
 		r(msg, "Dere dere~", "TSUN TSUN!")
 	elif ms(message, "!90s") or ms(message, "!running"):
 		r(msg, "https://www.youtube.com/watch?v=-gx8kg8BUa0")
-	elif (mc(message, "I don't understand") or mc(message, "Wakaranai")) and not mc(message, "webm"):
-		r(msg, "http://openings.moe/?video=Wakaranai.webm")
 	elif ms(message, "!Windows") or ms(message, "!Linux") or ms(message, "!OSX") or ms(message, "!MAC"):
 		r(msg, "http://openings.moe/?video=InstallLinux.webm")
 	elif ms(message, "!Math"):
@@ -319,6 +323,7 @@ def on_message(msg):
 						"Church of God of Light doesn't allow divorces."]
 			r(msg, random.choice(options) , thinking=thinking)
 
+
 	# -----------------#
 	#      Sevens      #
 	# -----------------#
@@ -369,6 +374,16 @@ def on_message(msg):
 		if not game:
 			sevens = None
 			r(msg, "The game of sevens has concluded.")
+
+	# -----------------#
+	#   Outside AAO    #
+	# -----------------#
+
+	elif (msg.channel.is_private or str(msg.server.id) != str(137392287108825088)):
+		if (mc(message, "I don't understand") or mc(message, "Wakaranai")) and not mc(message, "webm"):
+			r(msg, "http://openings.moe/?video=Wakaranai.webm")
+		elif ms(message, "!NC17"):
+			r(msg, "Hopefully you don't see this in AAO.")
 
 	# -----------------#
 	#      Command     #
