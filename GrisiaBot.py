@@ -150,6 +150,7 @@ def on_message(msg):
 
 	message = msg.content
 
+	nc = msg.channel.is_private or str(msg.server.id) != str(137392287108825088)
 
 	thinking = False
 	if mode == "double":
@@ -287,6 +288,21 @@ def on_message(msg):
 		r(msg, "SHINDOU!!")
 	elif ms(message, "!Shindou") or ms(message, "!Hikaru") or ms(message, "!Shindo"):
 		r(msg, "TOUYA!!")
+	elif ms(message, "!Shiro") or ms(message, "!FSN") or ms(message, "!Fate Stay Night") or ms(message, "!Fate/Stay Night"):
+		options = ["People die if they're killed.",
+					"Everything is here, and nothing is here. That's why this is called Unlimited Blade Works. This is the only definite answer obtained by the one who lived as a sword all his life.",
+					"Eternity is instantaneous and an instant is eternal.",
+					"You're a one-trick pony, just like me!",
+					"When you have a birthday, you celebrate being born.",
+					"...Yes, the desire to protect something... is, at the same time, none other than the wish for something to violate it.",
+					"I shake her hand. ...I'm a bit perplexed. The instant I feel Tohsaka's soft hand, I realize she is a girl.",
+					"Yeah. It's rare for her to run away. But... I see, even Mitsuzuri is weak against molesters. I guess that's good. It's impossible to teach her femininity unless something like this happens.",
+					"Just because you're correct, doesn't mean you're right."]
+		r(msg, random.choice(options))
+	elif ms(message, "!Rin") or ms(message, "!Tohsaka") or ms(message, "!Tousaka"):
+		r(msg, "Archer class is really made of archers.")
+	elif ms(message, "!Gil"):
+		r(msg, "Oh, immortality. Heh, I gave that to the snake.")
 	elif ms(message, "!Ship"):
 		members = msg.server.members
 		if not ms(message, "!Ship all"):
@@ -379,11 +395,14 @@ def on_message(msg):
 	#   Outside AAO    #
 	# -----------------#
 
-	elif (msg.channel.is_private or str(msg.server.id) != str(137392287108825088)):
-		if (mc(message, "I don't understand") or mc(message, "Wakaranai")) and not mc(message, "webm"):
-			r(msg, "http://openings.moe/?video=Wakaranai.webm")
-		elif ms(message, "!NC17"):
-			r(msg, "Hopefully you don't see this in AAO.")
+	elif nc and (mc(message, "I don't understand") or mc(message, "Wakaranai")) and not mc(message, "webm"):
+		r(msg, "http://openings.moe/?video=Wakaranai.webm")
+	elif nc and ms(message, "!NC17"):
+		r(msg, "Hopefully you don't see this in AAO.")
+	elif ms(message, "!romance") or ms(message, "!love") or ms(message, "!true love"):
+		options = ["If you let me race your friend, I'll give you my virginity!",
+					"",
+					"https://www.youtube.com/watch?v=KUCJ0pfefzI"]
 
 	# -----------------#
 	#      Command     #
